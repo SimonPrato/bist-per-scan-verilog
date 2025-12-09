@@ -2,7 +2,7 @@
 
 module scan(scan_in, scan_out, test_control, clock);
 input scan_in, test_control, clock;
-output reg scan, out;
+output reg scan_out;
 
 localparam shift = 1, test_control = 0;
 reg shift_reg[6:0];
@@ -14,6 +14,7 @@ always @(posedge clock) begin
 			for (i = 0; i < 6; i = i + 1)
 				shift_reg[i] <= shift_reg[i+1];
 			shift_reg[6] <= scan_in;
+			scan_out <= shift_reg[0];
 		end
 	default: ;
 	endcase
