@@ -18,4 +18,4 @@ always @(posedge clock) begin
 	default: ;
 	endcase
 end
-
+endmodule
