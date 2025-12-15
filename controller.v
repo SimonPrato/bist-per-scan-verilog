@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-module state_machine(clock, reset, bist_start, mode, bist_end, init, running, finish);
+module controller(clock, reset, bist_start, mode, bist_end, init, running, finish);
 input clock, reset, bist_start;
 output reg mode, bist_end, init, running, finish;
 
