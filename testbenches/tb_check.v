@@ -1,45 +1,89 @@
 `timescale 1ns/1ps
 
-module tb_check;
+module tb_circuito08_vec;
 
-    // Inputs
-    reg clk = 0;
-    reg rst = 0;
-    reg [3:0] a = 0;
-    reg [3:0] b = 0;
 
-    // Outputs
-    wire [3:0] y;
+// -----------------------------
+// Parameters
+// -----------------------------
+	parameter VEC_W = 5;      // width of one vector
+	parameter VEC_N = 30;   // max number of vectors in file
+// -----------------------------	
+// Inputs
+// -----------------------------
 
-    // Instantiate CUT
-    circuito08 UUT (
-        .clk(clk),
-        .rst(rst),
-        .a(a),
-        .b(b),
-        .y(y)
-    );
+	reg	clock;
+	reg	reset;
+
+	reg	s;
+	reg 	dv;
+	reg	l_in;
+	reg [1:0] test_in;
+
+// -----------------------------
+// Outputs
+// -----------------------------
+
+	wire	fz_L;
+	wire 	lclk;
+	wire [4:0] read_a;
+	wire [1:0] test_out;
+
+// -----------------------------
+// Vector memory
+// -----------------------------
+	reg [VEC_W-1:0] pattern_mem [0:VEC_N-1];
+	integer i;
+
+	circuito08 dut (
+		.clock(clock),
+		.reset(reset),
+		.s(s),
+		.dv(dv),
+		.l_in(l_in),
+		.test_in(test_in),
+		.fz_L(fz_L),
+		.lclk(lclk),
+		.read_a(read_a),
+		.test_out(test_out)
+	);
 
     // Clock generator (10ns period)
-    always #5 clk = ~clk;
+    always #2000 clock = ~clock;
 
+    // -----------------------------
+    // Load vectors from file
+    // -----------------------------
     initial begin
-        $display("Starting simulation...");
+        $readmemb("testbenches/circuito08.vec", pattern_mem);
+    end
 
-        // Pulse reset
-        rst = 1;
-        #10;
-        rst = 0;
+    // -----------------------------
+    // Apply vectors
+    // -----------------------------
+    initial begin
+        clock   = 0;
+        reset   = 1;
+        s       = 0;
+        dv      = 0;
+        l_in    = 0;
+        test_in = 2'b00;
 
-        // Apply some test vectors
-        a = 4'd3;  b = 4'd2;  #10;  // y should become 5
-        a = 4'd7;  b = 4'd8;  #10;  // y should become 15
-        a = 4'd5;  b = 4'd1;  #10;  // y should become 6
+        // reset
+        repeat (3) @(posedge clock);
+        reset = 0;
 
-        // Print final result
-        $display("Final y = %d", y);
+        // apply vectors (1 per clock)
+        for (i = 0; i < VEC_N; i = i + 1) begin
+            {s, dv, l_in, test_in} = pattern_mem[i];
+            @(posedge clock);
 
-        $finish;
+            $display("i=%0d in=%b | fz_L=%b lclk=%b read_a=%b test_out=%b",
+                     i, pattern_mem[i], fz_L, lclk, read_a, test_out);
+        end
+
+        $display("DONE");
+        $stop;
     end
 
 endmodule
