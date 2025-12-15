@@ -1,88 +1,86 @@
 `timescale 1ns/1ps
 
-module tb_circuito08_vec;
+module tb_circuito08;
 
+    // DUT inputs
+    reg clock;
+    reg reset;
+    reg s;
+    reg dv;
+    reg l_in;
+    reg [1:0] test_in;
 
-// -----------------------------
-// Parameters
-// -----------------------------
-	parameter VEC_W = 5;      // width of one vector
-	parameter VEC_N = 30;   // max number of vectors in file
-// -----------------------------	
-// Inputs
-// -----------------------------
+    // DUT outputs
+    wire fz_L;
+    wire lclk;
+    wire [4:0] read_a;
+    wire [1:0] test_out;
 
-	reg	clock;
-	reg	reset;
+    // DUT
+    circuito08 dut (
+        .clock(clock),
+        .reset(reset),
+        .s(s),
+        .dv(dv),
+        .l_in(l_in),
+        .test_in(test_in),
+        .fz_L(fz_L),
+        .lclk(lclk),
+        .read_a(read_a),
+        .test_out(test_out)
+    );
 
-	reg	s;
-	reg 	dv;
-	reg	l_in;
-	reg [1:0] test_in;
-
-// -----------------------------
-// Outputs
-// -----------------------------
-
-	wire	fz_L;
-	wire 	lclk;
-	wire [4:0] read_a;
-	wire [1:0] test_out;
-
-// -----------------------------
-// Vector memory
-// -----------------------------
-	reg [VEC_W-1:0] pattern_mem [0:VEC_N-1];
-	integer i;
-
-	circuito08 dut (
-		.clock(clock),
-		.reset(reset),
-		.s(s),
-		.dv(dv),
-		.l_in(l_in),
-		.test_in(test_in),
-		.fz_L(fz_L),
-		.lclk(lclk),
-		.read_a(read_a),
-		.test_out(test_out)
-	);
-
-    // Clock generator (10ns period)
+    // Long clock period (required by assignment)
+    // Period = 4000 ns (>2000)
     always #2000 clock = ~clock;
 
-    // -----------------------------
-    // Load vectors from file
-    // -----------------------------
-    initial begin
-        $readmemb("testbenches/circuito08.vec", pattern_mem);
-    end
+    // Vector memory: 30 vectors, 5 bits each
+    localparam integer VEC_MAX = 30;
+    reg [4:0] vec_mem [0:VEC_MAX-1];
 
-    // -----------------------------
-    // Apply vectors
-    // -----------------------------
+    integer i;
+
     initial begin
-        clock   = 0;
-        reset   = 1;
-        s       = 0;
-        dv      = 0;
-        l_in    = 0;
+        // Initialize
+        clock   = 1'b0;
+        reset   = 1'b1;
+        s       = 1'b0;
+        dv      = 1'b0;
+        l_in    = 1'b0;
         test_in = 2'b00;
 
-        // reset
+        // Load vectors from file
+        // File lines: 01010, 10111, ...
+        $readmemb("testbenches/circuito08.vec", vec_mem);
+
+        // Reset for a few cycles
         repeat (3) @(posedge clock);
-        reset = 0;
+        reset = 1'b0;
 
-        // apply vectors (1 per clock)
-        for (i = 0; i < VEC_N; i = i + 1) begin
-            {s, dv, l_in, test_in} = pattern_mem[i];
+        $display("vec# raw   | s dv l_in test_in | fz_L lclk read_a(dec/bin) test_out || cur nxt");
+
+        // Apply vectors as a time sequence: ONE vector per clock
+        for (i = 0; i < VEC_MAX; i = i + 1) begin
+            // Map vector bits to inputs
+            // vec[4]=s, vec[3]=dv, vec[2]=l_in, vec[1:0]=test_in
+            s       = vec_mem[i][4];
+            dv      = vec_mem[i][3];
+            l_in    = vec_mem[i][2];
+            test_in = vec_mem[i][1:0];
+
+// Sample outputs on the next rising edge
             @(posedge clock);
+            #1;
 
-            $display("i=%0d in=%b | fz_L=%b lclk=%b read_a=%b test_out=%b",
-                     i, pattern_mem[i], fz_L, lclk, read_a, test_out);
+            $display("%0d    %05b | %b %b   %b    %02b     |  %b    %b    %0d/%05b       %02b    ||  %0d  %0d",
+                     i, vec_mem[i],
+                     s, dv, l_in, test_in,
+                     fz_L, lclk, read_a, read_a, test_out,
+                     dut.cur, dut.nxt);
+
         end
 
-        $display("DONE");
+        $display("DONE.");
         $stop;
     end
 
