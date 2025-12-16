@@ -10,7 +10,7 @@ localparam [2:0] S0=0, S1=1, S2=2, S3=3, S4=4, S5=5;
 
 // Parameters N and M defining the output sequence
 parameter N = 13;
-parameter M = 1;
+parameter M = 1000;
 
 // Calculate required register sizes to contain the number of iterations conducted.
 parameter N_SIZE = $clog2(N + 1);
