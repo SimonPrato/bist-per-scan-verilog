@@ -1,5 +1,3 @@
-`timescale 1ns/1ps
-
 module lfsr(scan_in, clock, reset);
 
 output reg scan_in;
@@ -21,4 +19,3 @@ always @(posedge clock) begin
 	end
 end
 endmodule
-

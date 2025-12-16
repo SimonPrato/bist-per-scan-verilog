@@ -1,0 +1,6 @@
+The Makefile is ready to use, but the files included in
+the folder "scripts" need to be customized
+
+To be used in this flow, a define named "SCAN" must be included in the testbench "b01_tb.v" 
+Use "`ifdef SCAN" and "`endif" (without quotes) to delimit the region enabled
+by the SCAN define.
