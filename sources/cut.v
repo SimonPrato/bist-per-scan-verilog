@@ -10,8 +10,8 @@ input dv;
 input l_in;
 input [1:0] test_in;
 input scan_in;
-output reg scan_out;
 input scan_en;
+output reg scan_out;
 output fz_L;
 output lclk;
 output [4:0] read_a;
@@ -63,10 +63,14 @@ reg  [1:0] test_out_i;
       scan_out <= 0;
     end
     else if(scan_en == 1'b 1) begin
-	scan_out <= cur;
-	cur <= read_a_i;
-	read_a_i <= lclk_i;	
-	lclk_i <= test_out_i; 
+	cur[0] <= scan_in;
+	cur[1] <= cur[0];
+	cur[2] <= cur[1];
+	read_a_i[0] <= cur[2];
+	read_a_i[1] <= read_a_i[0];
+	read_a_i[2] <= read_a_i[1];
+	read_a_i[3] <= read_a_i[2];
+	read_a_i[4] <= read_a_i[3];
     end
     else
     begin
@@ -189,7 +193,8 @@ reg  [1:0] test_out_i;
     if(reset == 1'b 1)
       test_out_i <= 2'b 00;
     else if (scan_en) begin
-      test_out_i <= out3;
+	test_out_i[1] <= read_a_i[4];
+	test_out_i[0] <= test_out_i[1];
     end
     else if(load_counter == 1'b 1) 
       test_out_i <= test_in + 2'b 10;
@@ -206,8 +211,8 @@ reg  [1:0] test_out_i;
       out4 <= 1'b 0;
     end
     else if (scan_en) begin
-      out3 <= out4;
-      out4 <= scan_in; 
+	out3 <= test_out_i[0];
+	scan_out <= out3;
     end
     else begin
       out3 <= comp;

@@ -4,12 +4,16 @@
 
 module top_module_tb;
 
-    reg clock, reset, bist_start;
+	reg clock, reset, bist_start, s, dv, l_in, test_in;
 
     top_module uut(
         .clock(clock),
         .reset(reset),
-	.bist_start(bist_start)
+	.bist_start(bist_start),
+	.s(s),
+	.dv(dv),
+	.l_in(l_in),
+	.test_in(test_in)
     );
 
     initial begin
@@ -17,6 +21,11 @@ module top_module_tb;
         clock = 0;
 	bist_start = 0;
         reset = 1;
+	s = 0;
+	dv = 0;
+	l_in = 0;
+	test_in = 0;
+
     end
 
     always

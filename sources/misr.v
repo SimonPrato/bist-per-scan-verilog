@@ -1,20 +1,32 @@
-module misr(clock, reset, scan_out, signature);
-localparam BITS = 10;
+module misr(clock, reset, scan_out, fz_L, lclk, read_a, test_out, signature);
+localparam SIGNATURE_BITS = 16;
 input clock;
 input reset;
-input wire scan_out;
+input scan_out;
+input fz_L;
+input lclk;
+input [4:0] read_a;
+input [1:0] test_out;
 
-output reg [BITS-1:0] signature;
+output reg [SIGNATURE_BITS-1:0] signature;
+integer i;
 
-wire xor_comb = signature[9] ^ signature[6] ^ scan_out;
+wire [9:0] data_in = {scan_out, fz_L, lclk, read_a, test_out};
 
 always @(posedge clock) begin
 	if (reset) begin
 		signature <= 0;
 	end
 	else begin
-        signature <= {signature[BITS-2:0], 1'b0} ^ {9'b0, xor_comb};
-	end	
+	for (i = 1; i < 10; i = i + 1) begin
+            signature[i] <= signature[i] ^ data_in[9 - i] ^ signature [i - 1]; 
+	end
+	signature[0] <= signature[0] ^ data_in[9];
+	for(i = 10; i < SIGNATURE_BITS-1; i = i + 1) begin
+	signature[i] <= signature[i] ^ signature [i-1];
+	end
+        end
+        	
 end
 
 endmodule
