@@ -1,4 +1,0 @@
-#
-# Edit the name of the module instantiated in your testbench
-#
-fault_target b01_tb.uut -type SA0+SA1
