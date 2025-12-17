@@ -17,17 +17,7 @@ output lclk;
 output [4:0] read_a;
 output [1:0] test_out;
 
-wire   clock;
-wire   reset;
-wire   s;
-wire   dv;
-wire   l_in;
-wire   [1:0] test_in;
-reg    fz_L;
-wire   lclk;
-wire   [4:0] read_a;
-wire   [1:0] test_out;
-wire   conflict;
+wire conflict;
 
 localparam [2:0]
   IDLE = 0,
