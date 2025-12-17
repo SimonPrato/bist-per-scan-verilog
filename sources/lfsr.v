@@ -1,9 +1,9 @@
-module lfsr(scan_in, clock, reset, mode);
-
-output reg scan_in;
-input clock;
-input reset;
-input mode;
+module lfsr(
+	output reg scan_in,
+    input clock,
+    input reset,
+    input mode
+);
 
 localparam MAX_BITS = 8;
 reg [MAX_BITS-1:0] shift_bits;
