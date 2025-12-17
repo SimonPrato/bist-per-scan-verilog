@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module circuito08 (clock, reset, s,
+module cut (clock, reset, s,
            dv, l_in, test_in, fz_L,
            lclk, read_a, test_out);
 
