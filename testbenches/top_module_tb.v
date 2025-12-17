@@ -9,11 +9,13 @@ module top_module_tb;
     top_module uut(
         .clock(clock),
         .reset(reset),
-	.bist_start(bist_start),
-	.s(s),
-	.dv(dv),
-	.l_in(l_in),
-	.test_in(test_in)
+        .bist_start(bist_start),
+        .s(s),
+        .dv(dv),
+        .l_in(l_in),
+        .test_in(test_in),
+        .pass_nfail(pass_nfail),
+        .bist_end(bist_end)
     );
 
     initial begin
