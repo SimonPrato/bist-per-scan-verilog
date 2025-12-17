@@ -52,7 +52,7 @@ reg  [1:0] test_out_i;
       lclk_i <= 1'b0;
       scan_out <= 0;
     end
-    else if(scan_en == 1'b 1) begin
+    else if(scan_en) begin
 	cur[0] <= scan_in;
 	cur[1] <= cur[0];
 	cur[2] <= cur[1];
