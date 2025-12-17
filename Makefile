@@ -22,7 +22,7 @@ SIM_syn_scan_circuit:
 	xrun $(GUI) -define SCAN -l verilog.log\
 		-v /opt/ic_tools/pdk/ams_c35_410/verilog/udp.v\
 		-v /opt/ic_tools/pdk/ams_c35_410/verilog/c35b4/c35_CORELIB.v\
-		cut_scan_syn.v\
+		sources/cut_scan_syn.v\
 		testbenches/tb_cut.v
 
 HAL:

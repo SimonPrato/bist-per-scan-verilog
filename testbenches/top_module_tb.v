@@ -19,21 +19,19 @@ module top_module_tb;
     );
 
     initial begin
-	$dumpfile("dump.vcd"); $dumpvars;
         clock = 0;
-	bist_start = 0;
+        bist_start = 0;
         reset = 1;
-	s = 0;
-	dv = 0;
-	l_in = 0;
-	test_in = 0;
-
+        s = 0;
+        dv = 0;
+        l_in = 0;
+        test_in = 0;
     end
 
     always
-	begin
-        #2000 clock = !clock;
-	end
+        begin
+            #2000 clock = !clock;
+        end
 
 
     initial
@@ -41,7 +39,6 @@ module top_module_tb;
         #15000 reset = 0;
         #1000 bist_start = 1;
 
-	// Finish
         #28000000  $finish;
         end
 
