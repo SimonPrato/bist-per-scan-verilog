@@ -1,4 +1,4 @@
-module misr(clock, reset, scan_out, fz_L, lclk, read_a, test_out, signature);
+module misr(clock, reset, scan_out, fz_L, lclk, read_a, test_out, signature, pass_nfail);
 localparam SIGNATURE_BITS = 16;
 input clock;
 input reset;
@@ -9,9 +9,14 @@ input [4:0] read_a;
 input [1:0] test_out;
 
 output reg [SIGNATURE_BITS-1:0] signature;
+output pass_nfail;
+
 integer i;
 
+reg [15:0] golden_signature = 16'b0010011010110101;
 wire [9:0] data_in = {scan_out, fz_L, lclk, read_a, test_out};
+
+assign pass_nfail = (signature == golden_signature);
 
 always @(posedge clock) begin
 	if (reset) begin

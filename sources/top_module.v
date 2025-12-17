@@ -5,7 +5,8 @@ module top_module(
     input s,
     input dv,
     input l_in,
-    input [1:0] test_in
+    input [1:0] test_in,
+    output pass_nfail
 );
 
 wire scan_in;
@@ -59,7 +60,8 @@ misr misr_1 (
 .lclk(lclk),
 .read_a(read_a),
 .test_out(test_out),
-.signature(signature)
+.signature(signature),
+.pass_nfail(pass_nfail)
 );
 
 endmodule
