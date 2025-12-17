@@ -65,4 +65,5 @@ FS_concurrent:
 		-log xfr.log
 
 clean:
+	# Clean
 	rm -rf fault_db fv xcelium.d cut* genus.* dft_rules.report fault_* hal* .hal* .rs* verilog.* xf* xrun*
