@@ -13,10 +13,10 @@ output pass_nfail;
 
 integer i;
 
-reg [15:0] golden_signature = 16'b0010011010110101;
+localparam [15:0] GOLDEN_SIGNATURE = 16'b0010011010110101;
 wire [9:0] data_in = {scan_out, fz_L, lclk, read_a, test_out};
 
-assign pass_nfail = (signature == golden_signature);
+assign pass_nfail = (signature == GOLDEN_SIGNATURE);
 
 always @(posedge clock) begin
 	if (reset) begin

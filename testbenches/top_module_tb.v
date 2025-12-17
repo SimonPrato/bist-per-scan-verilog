@@ -4,9 +4,12 @@
 
 module top_module_tb;
 
-	reg clock, reset, bist_start, s, dv, l_in, test_in;
+	reg clock, reset, bist_start, s, dv, l_in; 
+    reg [1:0] test_in;
+    wire [4:0] read_a;
+    wire [1:0] test_out;
 
-    top_module uut(
+    top_module top_uut(
         .clock(clock),
         .reset(reset),
         .bist_start(bist_start),
@@ -15,7 +18,11 @@ module top_module_tb;
         .l_in(l_in),
         .test_in(test_in),
         .pass_nfail(pass_nfail),
-        .bist_end(bist_end)
+        .bist_end(bist_end),
+        .fz_L(fz_L),
+        .lclk(lclk),
+        .read_a(read_a),
+        .test_out(test_out)
     );
 
     initial begin
@@ -26,6 +33,10 @@ module top_module_tb;
         dv = 0;
         l_in = 0;
         test_in = 0;
+        #15000 reset = 0;
+        #1000 bist_start = 1;
+
+        #28000000  $finish;
     end
 
     always
@@ -34,12 +45,5 @@ module top_module_tb;
         end
 
 
-    initial
-        begin
-        #15000 reset = 0;
-        #1000 bist_start = 1;
-
-        #28000000  $finish;
-        end
 
 endmodule

@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module top_module(
     input clock,
     input reset,
@@ -5,23 +7,16 @@ module top_module(
     input s,
     input dv,
     input l_in,
-    input scan_in,
-    input scan_en,
     input [1:0] test_in,
     output pass_nfail,
     output bist_end,
     output fz_L,
     output lclk,
-    output scan_out,
     output [4:0]read_a,
-    output test_out
+    output [1:0] test_out
 );
 
-wire fz_L;
-wire lclk;
-wire [4:0] read_a;
-wire [1:0] test_out;
-wire bist_end, init, running, finish;
+wire init, running, finish;
 wire [15:0] signature;
 
 lfsr lfsr_1 (
@@ -31,7 +26,7 @@ lfsr lfsr_1 (
 .mode(scan_en)
 );
 
-cut_scan_syn cut_scan_syn_1 (
+cut cut_1 (
 .clock(clock),
 .reset(reset),
 .s(s),

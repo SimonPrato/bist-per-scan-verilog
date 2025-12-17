@@ -14,7 +14,7 @@ module tb_cut;
     wire [4:0]  read_a;
     wire [1:0]  test_out;
 
-    cut uut (
+    cut cut_uut (
         .clock    (clock),
         .reset    (reset),
         .s        (s),

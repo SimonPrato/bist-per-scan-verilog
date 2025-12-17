@@ -3,13 +3,13 @@
 # Paths
 set LIB_DIR "/opt/ic_tools/pdk/ams_c35_410/liberty/c35_3.3V"
 set_db init_lib_search_path $LIB_DIR
-set_db init_hdl_search_path {./sources/}
+set_db init_hdl_search_path {.}
 
 # Read the library
 read_libs c35_CORELIB_TYP.lib
 
 # Read the circuit
-read_hdl cut.v
+read_hdl sources/cut.v
 
 # Elaboration (pre-synthesis)
 elaborate cut
@@ -54,12 +54,12 @@ connect_scan_chains -auto_create_chains
 
 # Generate reports
 report qor
-write_hdl -mapped > sources/cut_scan_syn.v 
-write_sdc > sim_results/cut_scan.sdc
-write_scandef > sim_results/cut_scan_chain.txt
-write_atpg -stil > sim_results/cut_scan.stil
-report gates > sim_results/cut_scan_gates.txt
-report timing > sim_results/cut_scan_timing.txt
+write_hdl -mapped > cut_scan_syn.v 
+write_sdc > cut_scan.sdc
+write_scandef > cut_scan_chain.txt
+write_atpg -stil > cut_scan.stil
+report gates > cut_scan_gates.txt
+report timing > cut_scan_timing.txt
 report power > sim_results/cut_power.txt
 
 exit

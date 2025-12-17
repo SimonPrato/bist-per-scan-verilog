@@ -9,10 +9,10 @@ set_db init_hdl_search_path {.}
 read_libs c35_CORELIB_TYP.lib
 
 # Read the circuit
-read_hdl cut.v
+read_hdl sources/top_module.v
 
 # Elaboration (pre-synthesis)
-elaborate cut
+elaborate top_module
 
 # Analyze the design
 check_design
@@ -33,9 +33,9 @@ ungroup -all
 
 # Generate reports
 report qor
-write_hdl -mapped > b01_syn.v 
-write_sdc > b01.sdc
-report gates > b01_gates.txt
-report timing > b01_timing.txt
-report power > b01_power.txt
+write_hdl -mapped > top_module_syn.v 
+write_sdc > top_module.sdc
+report gates > top_module_gates.txt
+report timing > top_module_timing.txt
+report power > top_module_power.txt
 
