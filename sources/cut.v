@@ -1,7 +1,8 @@
-module cut (clock, reset, s,
+`timescale 1ns / 1ps
+
+module circuito08 (clock, reset, s,
            dv, l_in, test_in, fz_L,
-           lclk, read_a, test_out,
-   	   scan_in, scan_out, scan_en);
+           lclk, read_a, test_out);
 
 input clock;
 input reset;
@@ -9,9 +10,6 @@ input s;
 input dv;
 input l_in;
 input [1:0] test_in;
-input scan_in;
-input scan_en;
-output reg scan_out;
 output fz_L;
 output lclk;
 output [4:0] read_a;
@@ -27,7 +25,7 @@ reg    fz_L;
 wire   lclk;
 wire   [4:0] read_a;
 wire   [1:0] test_out;
-wire conflict;
+wire   conflict;
 
 localparam [2:0]
   IDLE = 0,
@@ -60,17 +58,6 @@ reg  [1:0] test_out_i;
       cur <= IDLE;
       read_a_i <= 5'b00000;
       lclk_i <= 1'b0;
-      scan_out <= 0;
-    end
-    else if(scan_en) begin
-	cur[0] <= scan_in;
-	cur[1] <= cur[0];
-	cur[2] <= cur[1];
-	read_a_i[0] <= cur[2];
-	read_a_i[1] <= read_a_i[0];
-	read_a_i[2] <= read_a_i[1];
-	read_a_i[3] <= read_a_i[2];
-	read_a_i[4] <= read_a_i[3];
     end
     else
     begin
@@ -192,11 +179,8 @@ reg  [1:0] test_out_i;
   always @(posedge clock) begin
     if(reset == 1'b 1)
       test_out_i <= 2'b 00;
-    else if (scan_en) begin
-	test_out_i[1] <= read_a_i[4];
-	test_out_i[0] <= test_out_i[1];
-    end
-    else if(load_counter == 1'b 1) 
+    else
+    if(load_counter == 1'b 1) 
       test_out_i <= test_in + 2'b 10;
     else 
       test_out_i <= test_out_i + 1'b 1;
@@ -209,10 +193,6 @@ reg  [1:0] test_out_i;
     if(reset == 1'b 1) begin
       out3 <= 1'b 0;
       out4 <= 1'b 0;
-    end
-    else if (scan_en) begin
-	out3 <= test_out_i[0];
-	scan_out <= out3;
     end
     else begin
       out3 <= comp;
