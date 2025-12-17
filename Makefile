@@ -15,7 +15,7 @@ SIM_rtl_circuit:
 SYN_dft_circuit:
 	# Synthesizing CUT with scan chain
 	genus -f scripts/synthesis_dft.tcl
-	sed -i '1s/^/`timescale 1ns\/1ps /' cut_scan_syn.v
+	sed -i '1s/^/`timescale 1ns\/1ps /' sources/cut_scan_syn.v
 
 SIM_syn_scan_circuit:
 	# Simulating CUT with scan chain
