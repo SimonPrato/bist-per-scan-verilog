@@ -1,5 +1,5 @@
 module lfsr(
-	output reg scan_in,
+    output reg scan_in,
     input clock,
     input reset,
     input mode
