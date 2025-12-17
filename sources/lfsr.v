@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module lfsr(
     output reg scan_in,
     input clock,
