@@ -6,7 +6,12 @@ module top_module(
     input dv,
     input l_in,
     input [1:0] test_in,
-    output pass_nfail
+    output pass_nfail,
+    output bist_end,
+    output fz_L,
+    output lclk,
+    output [4:0]read_a),
+    output test_out
 );
 
 wire scan_in;
