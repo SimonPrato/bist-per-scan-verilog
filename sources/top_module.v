@@ -30,7 +30,7 @@ lfsr lfsr_1 (
 .mode(mode)
 );
 
-cut cut_1 (
+cut_scan_syn cut_scan_syn_1 (
 .clock(clock),
 .reset(reset),
 .s(s),
