@@ -6,7 +6,7 @@ CIRCUIT = cut
 
 all:       circuit_rtl circuit_bist FS_concurrent 
 circuit_rtl:   SIM_rtl_circuit SYN_dft_circuit SIM_syn_scan_circuit
-circuit_bist:  SIM_bist_circuit SYN_bist_circuit
+circuit_bist:  SIM_bist_circuit SYN_bist_circuit SIM_syn_bist_circuit
 
 SIM_rtl_circuit:
 	# Simulating CUT
@@ -39,7 +39,7 @@ SIM_syn_bist_circuit:
 	xrun $(GUI) -define SCAN -l verilog.log\
 		-v /opt/ic_tools/pdk/ams_c35_410/verilog/udp.v\
 		-v /opt/ic_tools/pdk/ams_c35_410/verilog/c35b4/c35_CORELIB.v\
-		top_module_scan_syn.v\
+		top_module_syn.v\
 		testbenches/top_module_tb.v
 
 HAL:
