@@ -60,6 +60,6 @@ write_scandef > cut_scan_chain.txt
 write_atpg -stil > cut_scan.stil
 report gates > cut_scan_gates.txt
 report timing > cut_scan_timing.txt
-report power > sim_results/cut_power.txt
+report power > cut_power.txt
 
 exit
