@@ -10,6 +10,10 @@ read_libs c35_CORELIB_TYP.lib
 
 # Read the circuit
 read_hdl sources/top_module.v
+read_hdl sources/misr.v
+read_hdl sources/lfsr.v
+read_hdl sources/controller.v
+read_hdl cut_scan_syn.v
 
 # Elaboration (pre-synthesis)
 elaborate top_module
