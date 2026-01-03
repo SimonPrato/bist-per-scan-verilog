@@ -1,0 +1,16 @@
+xrun(64): 20.09-s001: (c) Copyright 1995-2020 Cadence Design Systems, Inc.
+TOOL:	xrun(64)	20.09-s001: Started on Jan 03, 2026 at 16:39:20 WET
+xrun
+	-define SCAN
+	-l reports/verilog.log-v
+	/opt/ic_tools/pdk/ams_c35_410/verilog/udp.v-v
+	/opt/ic_tools/pdk/ams_c35_410/verilog/c35b4/c35_CORELIB.v
+	cut_scan_syn.v
+	sources/top_module.v
+	sources/lfsr.v
+	sources/misr.v
+	sources/controller.v
+	testbenches/tb_top_level_normal.v
+xrun: *E,FMUK: The type of the file (/opt/ic_tools/pdk/ams_c35_410/verilog/udp.v-v) could not be determined.
+xrun: *E,FILEMIS: Cannot find the provided file /opt/ic_tools/pdk/ams_c35_410/verilog/udp.v-v.
+TOOL:	xrun(64)	20.09-s001: Exiting on Jan 03, 2026 at 16:39:21 WET  (total: 00:00:01)

@@ -1,4 +1,4 @@
 #
 # Edit the name of the module instantiated in your testbench
 #
-fault_target top_module_tb.top_uut -type SA0+SA1
+fault_target tb_top_level_bist.dut -type SA0+SA1

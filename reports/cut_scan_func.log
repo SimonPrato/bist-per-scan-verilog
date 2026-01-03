@@ -1,0 +1,81 @@
+xrun(64): 20.09-s001: (c) Copyright 1995-2020 Cadence Design Systems, Inc.
+TOOL:	xrun(64)	20.09-s001: Started on Jan 02, 2026 at 20:35:54 WET
+xrun
+	-define SCAN
+	-nospecify
+	-notimingchecks
+	-delay_mode zero
+	-l reports/cut_scan_func.log
+	-v /opt/ic_tools/pdk/ams_c35_410/verilog/udp.v
+	-v /opt/ic_tools/pdk/ams_c35_410/verilog/c35b4/c35_CORELIB.v
+	cut_scan_syn.v
+	testbenches/tb_cut.v
+file: cut_scan_syn.v
+	module worklib.cut:v
+		errors: 0, warnings: 0
+file: testbenches/tb_cut.v
+	module worklib.tb_cut:v
+		errors: 0, warnings: 0
+		Caching library 'c35_CORELIB' ....... Done
+		Caching library 'worklib' ....... Done
+		Caching library 'udp' ....... Done
+	Elaborating the design hierarchy:
+	Top level design units:
+		tb_cut
+	Building instance overlay tables: .................... Done
+	Generating native compiled code:
+		worklib.tb_cut:v <0x566c5c3b>
+			streams:   5, words:  9269
+	Building instance specific data structures.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                 Instances  Unique
+		Modules:                72      28
+		UDPs:                   30       3
+		Primitives:             98       7
+		Registers:              23      12
+		Scalar wires:           21       -
+		Expanded wires:          2       1
+		Always blocks:           1       1
+		Initial blocks:          1       1
+		Pseudo assignments:      1       1
+		Simulation timescale:  1ps
+	Writing initial simulation snapshot: worklib.tb_cut:v
+Loading snapshot worklib.tb_cut:v .................... Done
+xcelium> source /opt/ic_tools/cad/xcelium20_09_hf001/tools/xcelium/files/xmsimrc
+xcelium> run
+0 01010 | fz_L=0 lclk=0 read_a=24 test_out=10
+1 10111 | fz_L=0 lclk=0 read_a=24 test_out=11
+2 01101 | fz_L=0 lclk=0 read_a=24 test_out=00
+3 10000 | fz_L=0 lclk=0 read_a=24 test_out=01
+4 11011 | fz_L=0 lclk=0 read_a=24 test_out=10
+5 00011 | fz_L=0 lclk=0 read_a=24 test_out=01
+6 00010 | fz_L=0 lclk=0 read_a=24 test_out=10
+7 11100 | fz_L=0 lclk=0 read_a=24 test_out=11
+8 01110 | fz_L=0 lclk=0 read_a=24 test_out=00
+9 00100 | fz_L=0 lclk=0 read_a=24 test_out=01
+10 01010 | fz_L=0 lclk=0 read_a=24 test_out=10
+11 10111 | fz_L=0 lclk=0 read_a=24 test_out=11
+12 01101 | fz_L=0 lclk=0 read_a=24 test_out=00
+13 10000 | fz_L=0 lclk=0 read_a=24 test_out=01
+14 11011 | fz_L=0 lclk=0 read_a=24 test_out=10
+15 00011 | fz_L=0 lclk=0 read_a=24 test_out=01
+16 00010 | fz_L=0 lclk=0 read_a=24 test_out=10
+17 11100 | fz_L=0 lclk=0 read_a=24 test_out=11
+18 01110 | fz_L=0 lclk=0 read_a=24 test_out=00
+19 00100 | fz_L=0 lclk=0 read_a=24 test_out=01
+20 01010 | fz_L=0 lclk=0 read_a=24 test_out=10
+21 10111 | fz_L=0 lclk=0 read_a=24 test_out=11
+22 01101 | fz_L=0 lclk=0 read_a=24 test_out=00
+23 10000 | fz_L=0 lclk=0 read_a=24 test_out=01
+24 11011 | fz_L=0 lclk=0 read_a=24 test_out=10
+25 00011 | fz_L=0 lclk=0 read_a=24 test_out=01
+26 00010 | fz_L=0 lclk=0 read_a=24 test_out=10
+27 11100 | fz_L=0 lclk=0 read_a=24 test_out=11
+28 01110 | fz_L=0 lclk=0 read_a=24 test_out=00
+29 00100 | fz_L=0 lclk=0 read_a=24 test_out=01
+CUT vector simulation DONE
+Simulation complete via $finish(1) at time 162001 NS + 0
+./testbenches/tb_cut.v:121         $finish;
+xcelium> exit
+TOOL:	xrun(64)	20.09-s001: Exiting on Jan 02, 2026 at 20:35:55 WET  (total: 00:00:01)

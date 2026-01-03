@@ -1,0 +1,17 @@
+
+
+####   Fault Instrumentation Information  ####
+
+   Total number of faults instrumented: 710
+   Number of fault nodes excluded: 0
+   Number of fault nodes ignored: 0
+   Number of faultable nodes: 355
+   Number of Untestable faults: 66
+       Number of SA0 faults: 322 [Prime: 274]
+       Number of SA1 faults: 322 [Prime: 275]
+       Number of SET faults: 0 [Prime: 0]
+       Number of SEU faults: 0 [Prime: 0]
+
+#### End of Fault Instrumentation Information ####
+
+

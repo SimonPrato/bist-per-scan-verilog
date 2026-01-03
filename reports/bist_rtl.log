@@ -1,0 +1,43 @@
+xrun(64): 20.09-s001: (c) Copyright 1995-2020 Cadence Design Systems, Inc.
+TOOL:	xrun(64)	20.09-s001: Started on Jan 02, 2026 at 20:52:11 WET
+xrun
+	sources/lfsr.v
+	cut_scan_syn.v
+	sources/controller.v
+	sources/misr.v
+	sources/top_module.v
+	testbenches/top_module_tb.v
+	-l reports/bist_rtl.log
+	-v /opt/ic_tools/pdk/ams_c35_410/verilog/udp.v
+	-v /opt/ic_tools/pdk/ams_c35_410/verilog/c35b4/c35_CORELIB.v
+		Caching library 'c35_CORELIB' ....... Done
+		Caching library 'worklib' ....... Done
+		Caching library 'udp' ....... Done
+	Elaborating the design hierarchy:
+	Top level design units:
+		top_module_tb
+	Building instance overlay tables: .................... Done
+	Building instance specific data structures.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                 Instances  Unique
+		Modules:                76      32
+		UDPs:                   30       3
+		Primitives:             98       7
+		Registers:              33      22
+		Scalar wires:           21       -
+		Expanded wires:          2       1
+		Vectored wires:          1       -
+		Always blocks:           7       7
+		Initial blocks:          1       1
+		Cont. assignments:       0       3
+		Timing checks:         182       -
+		Simulation timescale:  1ps
+	Writing initial simulation snapshot: worklib.top_module_tb:v
+Loading snapshot worklib.top_module_tb:v .................... Done
+xcelium> source /opt/ic_tools/cad/xcelium20_09_hf001/tools/xcelium/files/xmsimrc
+xcelium> run
+Simulation complete via $finish(1) at time 28016 US + 0
+./testbenches/top_module_tb.v:39         #28000000  $finish;
+xcelium> exit
+TOOL:	xrun(64)	20.09-s001: Exiting on Jan 02, 2026 at 20:52:14 WET  (total: 00:00:03)
