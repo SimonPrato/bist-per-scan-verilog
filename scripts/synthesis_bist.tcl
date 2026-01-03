@@ -43,3 +43,4 @@ report gates > top_module_gates.txt
 report timing > top_module_timing.txt
 report power > top_module_power.txt
 
+exit
