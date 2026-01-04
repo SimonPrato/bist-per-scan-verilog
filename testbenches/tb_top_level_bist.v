@@ -45,13 +45,13 @@ module tb_top_level_bist;
         test_in = 0;
 
         // Release reset
-        # 30000 reset = 0;
+        #30000 reset = 0;
 
         // Start BIST (one clean pulse)
-        @(posedge clock);
-        bist_start = 1;
+        #100 bist_start = 1;
 
         // Wait until BIST finishes
+        repeat(10000) @(posedge clock);
         wait (bist_end == 1);
 
         // Report result
