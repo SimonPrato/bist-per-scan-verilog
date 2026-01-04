@@ -33,7 +33,7 @@ module tb_top_level_bist;
     );
 
     // Clock: 4 us period
-    always #2000 clock = ~clock;
+    always #5000 clock = ~clock;
 
     initial begin
         // Init
@@ -46,14 +46,11 @@ module tb_top_level_bist;
         test_in = 0;
 
         // Release reset
-        repeat (3) @(posedge clock);
-        reset = 0;
+        # 30000 reset = 0;
 
         // Start BIST (one clean pulse)
         @(posedge clock);
         bist_start = 1;
-        @(posedge clock);
-        bist_start = 0;
 
         // Wait until BIST finishes
         wait (bist_end == 1);
@@ -65,17 +62,6 @@ module tb_top_level_bist;
             $display("BIST FAILED");
 
         #1000;
-
-// Wait for BIST to finish
-	wait (bist_end == 1'b1);
-
-// Give one extra clock to stabilize
-	@(posedge clock);
-
-// Print PASS_NFAIL and BIST_END
-	$display("====================================");
-	$display("BIST_END=%b PASS_NFAIL=%b", bist_end, pass_nfail);
-	$display("====================================");
 
         $finish;
     end
