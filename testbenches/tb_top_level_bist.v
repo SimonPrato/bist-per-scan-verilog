@@ -1,7 +1,6 @@
 `timescale 1ns/1ps
 
 module tb_top_level_bist;
-
     reg clock;
     reg reset;
     reg bist_start;
@@ -11,9 +10,9 @@ module tb_top_level_bist;
     wire pass_nfail;
     wire bist_end;
     wire fz_L;
-    wire lclk;
-    wire [4:0] read_a;
-    wire [1:0] test_out;
+    wire cut_lclk;
+    wire [4:0] cut_read_a;
+    wire [1:0] cut_test_out;
 
     // DUT
     top_module dut (
@@ -27,9 +26,9 @@ module tb_top_level_bist;
         .pass_nfail(pass_nfail),
         .bist_end(bist_end),
         .fz_L(fz_L),
-        .lclk(lclk),
-        .read_a(read_a),
-        .test_out(test_out)
+        .cut_lclk(cut_lclk),
+        .cut_read_a(cut_read_a),
+        .cut_test_out(cut_test_out)
     );
 
     // Clock: 4 us period

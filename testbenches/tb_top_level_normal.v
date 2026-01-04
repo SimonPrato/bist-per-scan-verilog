@@ -1,16 +1,15 @@
 `timescale 1ns/1ps
 
 module top_module_tb;
-
     reg clock, reset, bist_start, s, dv, l_in;
     reg [1:0] test_in;
 
     wire pass_nfail;
     wire bist_end;
-    wire fz_L;
-    wire lclk;
-    wire [4:0] read_a;
-    wire [1:0] test_out;
+    wire cut_fz_L;
+    wire cut_lclk;
+    wire [4:0] cut_read_a;
+    wire [1:0] cut_test_out;
 
     top_module top_uut(
         .clock(clock),
@@ -22,10 +21,10 @@ module top_module_tb;
         .test_in(test_in),
         .pass_nfail(pass_nfail),
         .bist_end(bist_end),
-        .fz_L(fz_L),
-        .lclk(lclk),
-        .read_a(read_a),
-        .test_out(test_out)
+        .cut_fz_L(cut_fz_L),
+        .cut_lclk(cut_lclk),
+        .cut_read_a(cut_read_a),
+        .cut_test_out(cut_test_out)
     );
 
     // Clock: 4000 ns period (>2000 ns requirement)
@@ -73,8 +72,8 @@ module top_module_tb;
             @(posedge clock);
             #1;
 
-            $display("%0d %05b | fz_L=%b lclk=%b read_a=%0d test_out=%02b",
-                     i, vec_mem[i], fz_L, lclk, read_a, test_out);
+            $display("%0d %05b | cut_fz_L=%b cut_lclk=%b cut_read_a=%0d cut_test_out=%02b",
+                     i, vec_mem[i], fz_L, cut_lclk, cut_read_a, cut_test_out);
         end
 
         $display("TOP normal-mode vector simulation DONE");
