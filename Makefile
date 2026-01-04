@@ -6,7 +6,8 @@ CIRCUIT = cut
 all:       circuit top_level FS_concurrent
 circuit:   SIM_rtl_circuit SYN_dft_circuit SIM_syn_scan_circuit
 top_level: SIM_rtl_top_level_normal SIM_rtl_top_level_bist SIM_rtl_top_level_controller SYN_final \
-	   SIM_syn_top_level_normal SIM_syn_top_level_bist SIM_syn_top_level_controller
+	   	   SIM_syn_top_level_normal SIM_syn_top_level_bist SIM_syn_top_level_controller
+syn:	   SYN_dft_circuit SYN_final
 
 SIM_rtl_circuit:
         # Step 1: simulate the original circuit (behavioral simulation)
