@@ -41,6 +41,7 @@ module misr (
                 signature[i] <= signature[i] ^ signature[i - 1];
             end
         end
+        else ;
         // else: hold signature
     end
 
