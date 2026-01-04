@@ -3,7 +3,6 @@
 module misr (
     input  clock,
     input  reset,
-    input  init,          // clears MISR at BIST start
     input  enable,        // accumulates only during BIST running
     input  scan_out,
     input  fz_L,
@@ -27,7 +26,7 @@ module misr (
     integer i;
 
     always @(posedge clock) begin
-        if (reset || init) begin
+        if (reset) begin
             signature <= {SIGNATURE_BITS{1'b0}};
         end
         else if (enable) begin
