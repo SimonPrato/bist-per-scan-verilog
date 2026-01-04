@@ -22,6 +22,8 @@ module top_module(
    wire scan_in;
    wire scan_out;
    wire [15:0] signature;
+   wire reset_lfsr;
+   assign reset_lfsr = reset & finish;
 
 // Controller outputs mode and running separately
    controller controller_1 (
@@ -42,7 +44,7 @@ module top_module(
    lfsr lfsr_1 (
     	.scan_in(scan_in),
     	.clock(clock),
-   	 .reset(reset),
+         .reset_lfsr(reset),
     	.mode(scan_en)
 	);
     // CUT = scan netlist (cut_scan_syn.v) MUST provide scan ports
