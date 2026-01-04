@@ -9,7 +9,7 @@ module tb_top_level_bist;
 
     wire pass_nfail;
     wire bist_end;
-    wire fz_L;
+    wire cut_fz_L;
     wire cut_lclk;
     wire [4:0] cut_read_a;
     wire [1:0] cut_test_out;
@@ -25,7 +25,7 @@ module tb_top_level_bist;
         .test_in(test_in),
         .pass_nfail(pass_nfail),
         .bist_end(bist_end),
-        .fz_L(fz_L),
+        .cut_fz_L(cut_fz_L),
         .cut_lclk(cut_lclk),
         .cut_read_a(cut_read_a),
         .cut_test_out(cut_test_out)
