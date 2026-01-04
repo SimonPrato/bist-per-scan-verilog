@@ -1,87 +1,92 @@
 `timescale 1ns/1ps
 
 module top_module(
-    input clock,
-    input reset,
-    input bist_start,
-    input s,
-    input dv,
-    input l_in,
-    input [1:0] test_in,
-    output pass_nfail,
-    output bist_end,
-    output fz_L,
-    output lclk,
-    output [4:0] read_a,
-    output [1:0] test_out
+    input  wire        clock,            
+    input  wire        reset,           
+    input  wire        bist_start,     
+    input  wire        s,             
+    input  wire        dv,           
+    input  wire        l_in,        
+    input  wire [1:0]  test_in,    
+    output wire        pass_nfail,
+    output wire        bist_end, 
+    output wire        cut_fz_L,
+    output wire        cut_lclk,         
+    output wire [4:0]  cut_read_a,      
+    output wire [1:0]  cut_test_out    
 );
 
-   wire init, running, finish;
-   wire mode;
-   wire scan_en;
-   wire scan_in;
-   wire scan_out;
-   wire [15:0] signature;
-   wire reset_lfsr_misr;
-   assign reset_lfsr_misr = reset & init;
+    // Internal control signals
+    wire controller_init;
+    wire controller_running;
+    wire controller_finish;
+    wire controller_mode;           // Scan vs functional mode
+    
+    // Scan chain signals
+    wire scan_enable;
+    wire scan_chain_in;
+    wire scan_chain_out;
+    wire [15:0] misr_signature;
+    
+    // Reset synchronization for LFSR/MISR
+    wire lfsr_misr_reset;
+    assign lfsr_misr_reset = reset & controller_init;
+    
+    // BIST Controller
+    controller controller_inst (
+        .clock(clock),
+        .reset(reset),
+        .bist_start(bist_start),
+        .mode(controller_mode),
+        .bist_end(bist_end),
+        .init(controller_init),
+        .running(controller_running),
+        .finish(controller_finish)
+    );
+    
+    // Scan enable generation
+    assign scan_enable = controller_mode & controller_running;
+    
+    // LFSR (pseudo-random pattern generator)
+    lfsr lfsr_inst (
+        .scan_bit(scan_chain_in),
+        .clock(clock),
+        .reset(lfsr_misr_reset),
+        .mode(scan_enable)
+    );
+    
+    // CUT inputs multiplexing (isolate during scan)
+    wire cut_s       = scan_enable ? 1'b0 : s;
+    wire cut_dv      = scan_enable ? 1'b0 : dv;
+    wire cut_l_in    = scan_enable ? 1'b0 : l_in;
+    wire [1:0] cut_test_in = scan_enable ? 2'b00 : test_in;
 
-// Controller outputs mode and running separately
-   controller controller_1 (
-    	.clock(clock),
-    	.reset(reset),
-    	.bist_start(bist_start),
-    	.mode(mode),
-    	.bist_end(bist_end),
-    	.init(init),
-    	.running(running),
-    	.finish(finish)
-   );
-
-// Derived scan enable (your AND gate)
-   assign scan_en = mode & running;
-
-// LFSR drives scan_in only when scan_en is active
-   lfsr lfsr_1 (
-    	.scan_in(scan_in),
-    	.clock(clock),
-         .reset_lfsr_misr(reset),
-    	.mode(scan_en)
-	);
-    // CUT = scan netlist (cut_scan_syn.v) MUST provide scan ports
-    // Optional: isolate functional inputs during scan mode (recommended)
-    wire cut_s       = scan_en ? 1'b0  : s;
-    wire cut_dv      = scan_en ? 1'b0  : dv;
-    wire cut_l_in    = scan_en ? 1'b0  : l_in;
-    wire [1:0] cut_test_in = scan_en ? 2'b00 : test_in;
-
-    cut cut_1 (
+    // Core Under Test (CUT)
+    cut cut_inst (
         .clock(clock),
         .reset(reset),
         .s(cut_s),
         .dv(cut_dv),
         .l_in(cut_l_in),
         .test_in(cut_test_in),
-        .fz_L(fz_L),
-        .lclk(lclk),
-        .read_a(read_a),
-        .test_out(test_out),
-        .scan_in(scan_in),
-        .scan_out(scan_out),
-        .scan_en(scan_en)
+        .fz_L(cut_fz_L),
+        .lclk(cut_lclk),
+        .read_a(cut_read_a),
+        .test_out(cut_test_out),
+        .scan_in(scan_chain_in),
+        .scan_out(scan_chain_out),
+        .scan_en(scan_enable)
     );
 
-    // MISR enabled only during running, cleared at init
-    misr misr_1 (
+    // Multiple Input Signature Register (MISR)
+    misr misr_inst (
         .clock(clock),
-        .reset_lfsr_misr(reset),
-        .enable(running),
-        .scan_out(scan_out),
-        .fz_L(fz_L),
-        .lclk(lclk),
-        .read_a(read_a),
-        .test_out(test_out),
-        .signature(signature),
+        .reset(lfsr_misr_reset),
+        .enable(controller_running),
+        .scan_out(scan_chain_out),
+        .signature(misr_signature),
         .pass_nfail(pass_nfail)
     );
 
 endmodule
+

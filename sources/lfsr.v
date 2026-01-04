@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module lfsr(
-    output scan_in,
+    output scan_bit,
     input clock,
     input reset,
     input mode
@@ -9,7 +9,7 @@ module lfsr(
 
 localparam MAX_BITS = 8;
 reg [MAX_BITS-1:0] shift_bits;
-assign scan_in = shift_bits[MAX_BITS-1];
+assign scan_bit = shift_bits[MAX_BITS-1];
 
 always @(posedge clock) begin
 	if (reset == 1) begin
