@@ -50,9 +50,8 @@ module tb_top_level_bist;
         // Start BIST (one clean pulse)
         #100 bist_start = 1;
 
-        #100000;
-
-        $finish;
+        wait (bist_end == 1'b1);
+        #10000 $finish;
     end
 
 endmodule
