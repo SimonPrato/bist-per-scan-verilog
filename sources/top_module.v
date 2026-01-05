@@ -30,7 +30,7 @@ module top_module(
     
     // Reset synchronization for LFSR/MISR
     wire lfsr_misr_reset;
-    assign lfsr_misr_reset = reset | controller_init | controller_finish;
+    assign lfsr_misr_reset = reset | controller_init;
     
     // BIST Controller
     controller controller_inst (
@@ -48,7 +48,7 @@ module top_module(
     assign scan_enable = controller_mode & controller_running;
     
     // LFSR (pseudo-random pattern generator)
-    lfsr lfsr_inst (
+    lfsr #(.MAX_BITS(16), .SEED(16'h5A5A)) lfsr_inst (
         .scan_bit(scan_chain_in),
         .clock(clock),
         .reset(lfsr_misr_reset),
@@ -82,7 +82,7 @@ module top_module(
     misr misr_inst (
         .clock(clock),
         .reset(lfsr_misr_reset),
-        .enable(controller_running),
+        .enable(scan_enable),
         .scan_out(scan_chain_out),
         .signature(misr_signature),
         .pass_nfail(pass_nfail),

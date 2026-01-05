@@ -16,7 +16,7 @@ module misr (
     localparam SIGNATURE_BITS = 16;
 
     // Golden signature (do NOT change unless recomputed) (before it was: b0010011010110101)
-    localparam [15:0] GOLDEN_SIGNATURE = 16'b0001100000011000;
+    localparam [15:0] GOLDEN_SIGNATURE = 16'b1110010100001001;
 
     // 10-bit MISR input vector
     wire [9:0] data_in = {scan_out, fz_L, lclk, read_a, test_out};

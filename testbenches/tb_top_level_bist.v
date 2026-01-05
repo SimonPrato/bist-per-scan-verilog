@@ -31,26 +31,38 @@ module tb_top_level_bist;
         .cut_test_out(cut_test_out)
     );
 
-    // Clock: 4 us period
+    // Clock (period = 10us here; OK if assignment just says >2000ns)
     always #5000 clock = ~clock;
 
     initial begin
-        // Init
-        clock = 0;
-        reset = 1;
-        bist_start = 0;
-        s = 0;
-        dv = 0;
-        l_in = 0;
-        test_in = 0;
+        clock = 1'b0;
+        reset = 1'b1;
+        bist_start = 1'b0;
+        s = 1'b0;
+        dv = 1'b0;
+        l_in = 1'b0;
+        test_in = 2'b00;
 
-        // Release reset
-        #30000 reset = 0;
+        // Hold reset for a few *clock edges* (better than #time)
+        repeat (3) @(posedge clock);
+        reset <= 1'b0;
 
-        // Start BIST (one clean pulse)
-        #100 bist_start = 1;
+        // Clean 1-cycle bist_start pulse
+        @(posedge clock);
+        bist_start <= 1'b1;
+        @(posedge clock);
+        bist_start <= 1'b0;
 
-        wait (bist_end == 1'b1);
+        // Wait for BIST done
+        wait (bist_end === 1'b1);
+
+        // Let outputs settle (esp. gate-level)
+        @(posedge clock);
+        @(posedge clock);
+	
+	$display("Golden signature: %b", dut.misr_signature);
+        $display("PASS_NFAIL: %b", pass_nfail);
+
         #10000 $finish;
     end
 

@@ -35,6 +35,17 @@ HAL:
         # Step 4: check for good Verilog coding style
 	hal -gui cut_scan_syn.v sources/controller.v sources/lfsr.v sources/misr.v sources/top_module.v
 
+SIM_bist_good:
+	xrun $(GUI) \
+		+SEED=$(SEED) \
+		-v /opt/ic_tools/pdk/ams_c35_410/verilog/udp.v \
+		-v /opt/ic_tools/pdk/ams_c35_410/verilog/c35b4/c35_CORELIB.v \
+		cut_scan_syn.v \
+		sources/top_module.v sources/lfsr.v sources/misr.v sources/controller.v \
+		testbenches/tb_top_level_bist.v
+
+
+
 SIM_rtl_top_level_normal:
         # Step 5a (OPTIONAL): simulate the whole design in "normal mode"
         # Top Level (behavioral) + circuit with scan chain (gate-level)
@@ -48,7 +59,7 @@ SIM_rtl_top_level_normal:
 SIM_rtl_top_level_bist:
 	# Step 5b (OPTIONAL): simulate the whole design in "bist mode"
 	# Top Level (behavioral) + circuit with scan chain (gate-level)
-	xrun $(GUI) -define SCAN -l reports/verilog.log \
+	xrun $(GUI) -define SCAN +SEED=$(SEED) -l reports/verilog.log \
 	-v /opt/ic_tools/pdk/ams_c35_410/verilog/udp.v \
 	-v /opt/ic_tools/pdk/ams_c35_410/verilog/c35b4/c35_CORELIB.v \
 		cut_scan_syn.v \
@@ -81,7 +92,8 @@ SIM_syn_top_level_normal:
 
 SIM_syn_top_level_bist:
 	# Step 7b: simulate the whole design in "bist mode" (gate-level simulation)
-	xrun $(GUI) -define SCAN -l reports/verilog.log \
+	xrun $(GUI) -define SCAN +SEED=$(SEED) -l reports/verilog.log \
+		-nospecify -notimingchecks -delay_mode zero \
 		-v /opt/ic_tools/pdk/ams_c35_410/verilog/udp.v \
 		-v /opt/ic_tools/pdk/ams_c35_410/verilog/c35b4/c35_CORELIB.v \
 		top_module_syn.v \
@@ -98,7 +110,7 @@ SIM_syn_top_level_controller:
 FS_concurrent:
 	# Step 8: concurrent fault simulation
 	# Elaborate
-	xrun -define SCAN -clean -elaborate \
+	xrun -define SCAN +SEED=$(SEED) -clean -elaborate \
 		-define functional \
 		-fault_file scripts/fault.file \
 		-fault_top top_module \
@@ -116,7 +128,7 @@ FS_concurrent:
 	# Perform fault simulation
 	xrun -R -fault_concurrent \
 		-nospecify -notimingchecks -delay_mode zero -run -exit \
-		-define functional \
+		-define functional +SEED=$(SEED)\
 		-input scripts/strobes.tcl \
 		-input fault_list.tcl \
 		-fault_logfile reports/fault_xrun_sim.log
