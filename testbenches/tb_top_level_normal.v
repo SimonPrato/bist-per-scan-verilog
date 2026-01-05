@@ -73,7 +73,7 @@ module top_module_tb;
             #1;
 
             $display("%0d %05b | cut_fz_L=%b cut_lclk=%b cut_read_a=%0d cut_test_out=%02b",
-                     i, vec_mem[i], fz_L, cut_lclk, cut_read_a, cut_test_out);
+                     i, vec_mem[i], cut_fz_L, cut_lclk, cut_read_a, cut_test_out);
         end
 
         $display("TOP normal-mode vector simulation DONE");
