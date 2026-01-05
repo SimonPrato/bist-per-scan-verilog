@@ -85,7 +85,11 @@ module top_module(
         .enable(controller_running),
         .scan_out(scan_chain_out),
         .signature(misr_signature),
-        .pass_nfail(pass_nfail)
+        .pass_nfail(pass_nfail),
+        .fz_L(cut_fz_L),
+        .lclk(cut_lclk),
+        .read_a(cut_read_a),
+        .test_out(cut_test_out)
     );
 
 endmodule
