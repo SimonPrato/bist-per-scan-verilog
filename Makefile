@@ -8,6 +8,9 @@ circuit:   SIM_rtl_circuit SYN_dft_circuit SIM_syn_scan_circuit
 top_level: SIM_rtl_top_level_normal SIM_rtl_top_level_bist SIM_rtl_top_level_controller SYN_final \
 	   	   SIM_syn_top_level_normal SIM_syn_top_level_bist SIM_syn_top_level_controller
 syn:	   SYN_dft_circuit SYN_final
+syn_fault: SYN_dft_circuit SYN_final FS_concurrent
+syn_sim:   SYN_dft_circuit SYN_final SIM_syn_top_level_bist
+
 
 SIM_rtl_circuit:
         # Step 1: simulate the original circuit (behavioral simulation)
