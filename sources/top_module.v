@@ -30,7 +30,7 @@ module top_module(
     
     // Reset synchronization for LFSR/MISR
     wire lfsr_misr_reset;
-    assign lfsr_misr_reset = reset | controller_init;
+    assign lfsr_misr_reset = reset | controller_init | controller_finish;
     
     // BIST Controller
     controller controller_inst (
