@@ -1,0 +1,25 @@
+#!/bin/bash
+#
+
+echo -n "Executing script ptfse.init ... "
+
+ICTOOLS_INIT=/opt/ic_tools/init
+export ICTOOLS_INIT
+
+# Para correr o XCelium Simulator
+source $ICTOOLS_INIT/init-xcelium20-09-hf001
+
+# Para correr o RC Compiler
+source $ICTOOLS_INIT/init-genus19-14-isr4
+
+# Para correr o Vmanager
+source $ICTOOLS_INIT/init-vmanager19-03-hf002
+
+# Para correr o Modus
+source $ICTOOLS_INIT/init-modus19-12-hf000
+
+alias man_cadence='cdnshelp'
+
+echo DONE
+
+echo To access the Cadence manuals type \"man_cadence\"
