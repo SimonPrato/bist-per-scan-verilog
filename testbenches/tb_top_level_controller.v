@@ -1,4 +1,4 @@
-`timescale 1ns/1ps
+`timescale 1ns/1ps
 
 module tb_controller;
 
@@ -30,7 +30,7 @@ module tb_controller;
     // MISR output
     wire pass_nfail;
 
-    top_level top_inst (
+    top_module top_inst (
         .clock(clock),
         .reset(reset),
         .bist_start(bist_start),
@@ -51,8 +51,10 @@ module tb_controller;
 
     // Monitor controller 
     always @(posedge clock) begin
-        $display("t=%0t | reset=%b bist_start=%b | bist_end=%b",
-                 $time, reset, bist_start, bist_end);
+        if (bist_end) begin
+            $display("t=%0t | reset=%b bist_start=%b | bist_end=%b",
+                     $time, reset, bist_start, bist_end);
+        end
     end
 
 
@@ -71,20 +73,20 @@ module tb_controller;
         // bist_end flag
         bist_end_reached = 1'b0;
 
-        // Release reset
-        reset = 1'b0;
-
         // Sequence one
-        #4000 reset = 0;
+        #8000 reset = 0;
         #4000 bist_start = 1;
 
         // wait for bist_end
-        repeat (15000) begin
+        begin: loop_block_1
+        repeat (20000) begin
             @(posedge clock);
             if (bist_end === 1'b1) begin
                 $display("=== Controller reached bist_end (Sequence one) ===");
                 bist_end_reached = 1;
+                disable loop_block_1;
             end
+        end
         end
 
         // display error if bist_end not reached
@@ -92,7 +94,7 @@ module tb_controller;
             $display("=== Controller did not reach bist_end (Sequence one) ===");
             $finish;
         end
-        bist_end_reached = 0;
+        #4000 bist_end_reached = 0;
 
         // Sequence two
         #100 bist_start = 0;
@@ -104,24 +106,27 @@ module tb_controller;
         #4000 bist_start = 0;
         #4000 bist_start = 1;
         #4000 reset = 0;
-        #8000 bist_start = 0;
-        #8000 bist_start = 1;
-        #4000 reset = 1;
+        #4000 bist_start = 0;
+        #4000 bist_start = 1;
 
         // check for bist_end
-        repeat (15000) begin
+        begin: loop_block_2
+        repeat (20000) begin
             @(posedge clock);
             if (bist_end === 1'b1) begin
                 $display("=== Controller reached bist_end (Sequence two) ===");
+                bist_end_reached = 1;
+                disable loop_block_2;
             end
+        end
         end
 
         // display error if bist_end not reached
         if (!bist_end_reached) begin
-            $display("=== Controller did not reach bist_end (Sequence one) ===");
+            $display("=== Controller did not reach bist_end (Sequence two) ===");
             $finish;
         end
-        bist_end_reached = 0;
+        #4000 bist_end_reached = 0;
 
         $finish;
     end
