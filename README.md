@@ -12,7 +12,6 @@ The top_leve.v will contain following components:
 - Signature (Golden Signature, correct, expected, fault-free final value of the MISR after the complete BIST execution)
 - Comparator (Compares the current value of a MISR to a Golden Signature and outputs a single bit, reffering to a pass or fail)
 Current circuit diagram:
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/392c7d6a-63c0-4b72-a5be-91f2c596236b" />
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/595f7e7c-63f1-4ae8-bf13-999164edc33e" />
 
 
