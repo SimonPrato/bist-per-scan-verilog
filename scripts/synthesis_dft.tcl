@@ -54,12 +54,12 @@ connect_scan_chains -auto_create_chains
 
 # Generate reports
 report qor
-write_hdl -mapped > cut_scan_syn.v 
-write_sdc > cut_scan.sdc
-write_scandef > cut_scan_chain.txt
-write_atpg -stil > cut_scan.stil
-report gates > cut_scan_gates.txt
-report timing > cut_scan_timing.txt
-report power > cut_power.txt
+write_hdl -mapped > sources/cut_scan_syn.v 
+write_sdc > reports/cut_scan.sdc
+write_scandef > reports/cut_scan_chain.txt
+write_atpg -stil > reports/cut_scan.stil
+report gates > reports/cut_scan_gates.txt
+report timing > reports/cut_scan_timing.txt
+report power > reports/cut_power.txt
 
 exit

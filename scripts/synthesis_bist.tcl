@@ -13,7 +13,7 @@ read_hdl sources/top_module.v
 read_hdl sources/misr.v
 read_hdl sources/lfsr.v
 read_hdl sources/controller.v
-read_hdl cut_scan_syn.v
+read_hdl sources/cut_scan_syn.v
 
 # Elaboration (pre-synthesis)
 elaborate top_module
@@ -37,10 +37,10 @@ ungroup -all
 
 # Generate reports
 report qor
-write_hdl -mapped > top_module_syn.v 
-write_sdc > top_module.sdc
-report gates > top_module_gates.txt
-report timing > top_module_timing.txt
-report power > top_module_power.txt
+write_hdl -mapped > sources/top_module_syn.v 
+write_sdc > reports/top_module.sdc
+report gates > reports/top_module_gates.txt
+report timing > reports/top_module_timing.txt
+report power > reports/top_module_power.txt
 
 exit
