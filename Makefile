@@ -50,15 +50,6 @@ HAL:
 
 # -------------------------------- #
 # TOP LEVEL SIMULATIONS AND SYNTHESIZATIONS
-SIM_bist_good:
-	xrun $(GUI) \
-		+SEED=$(SEED) \
-		-v /opt/ic_tools/pdk/ams_c35_410/verilog/udp.v \
-		-v /opt/ic_tools/pdk/ams_c35_410/verilog/c35b4/c35_CORELIB.v \
-		sources/cut_scan_syn.v \
-		sources/top_module.v sources/lfsr.v sources/misr.v sources/controller.v \
-		testbenches/tb_top_level_bist.v
-
 SIM_rtl_top_level_normal:
         # Step 5a (OPTIONAL): simulate the whole design in "normal mode"
         # Top Level (behavioral) + circuit with scan chain (gate-level)
