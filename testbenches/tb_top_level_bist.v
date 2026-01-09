@@ -14,6 +14,8 @@ module tb_top_level_bist;
     wire [4:0] cut_read_a;
     wire [1:0] cut_test_out;
 
+    integer file_handle;
+
     // DUT
     top_module dut (
         .clock(clock),
@@ -33,6 +35,11 @@ module tb_top_level_bist;
 
     // Clock (period = 10us here; OK if assignment just says >2000ns)
     always #5000 clock = ~clock;
+
+    initial begin
+      file_handle = $fopen("reports/golden-signature.txt", "w");  // Opens file for writing
+    end
+
 
     initial begin
         clock = 1'b0;
@@ -60,9 +67,15 @@ module tb_top_level_bist;
         @(posedge clock);
         @(posedge clock);
 	
-	$display("Golden signature: %b", dut.misr_signature);
+        `ifdef MISR_SIGNATURE_EXISTS
+            $fwrite(file_handle, "%d\n", dut.misr_signature);
+        `else
+            $display("misr_signature not available");
+        `endif
+
         $display("PASS_NFAIL: %b", pass_nfail);
 
+        $fclose(file_handle);
         #10000 $finish;
     end
 
