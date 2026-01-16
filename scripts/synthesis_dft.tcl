@@ -1,53 +1,34 @@
-# Cadence GENUS
+# DFT Synthesis Script for CUT with Scan Chain Insertion
 
-# Paths
 set LIB_DIR "/opt/ic_tools/pdk/ams_c35_410/liberty/c35_3.3V"
 set_db init_lib_search_path $LIB_DIR
 set_db init_hdl_search_path {.}
 
-# Read the library
 read_libs c35_CORELIB_TYP.lib
-
-# Read the circuit
 read_hdl sources/cut.v
 
-# Elaboration (pre-synthesis)
 elaborate cut
-
-# Analyze the design
 check_design
 
-# Define the name of the clock signal and its frequency
-######## IMPORTANT ########
-#### THE SIGNAL NAMED "clock" MAY NEED TO BE REPLACED
-#### BY THE NAME OF THE CLOCK IN YOUR CIRCUIT
+# Clock definition: 10000ns = 100kHz
 create_clock -name clk -period 10000 [get_ports clock]
 
-# Read the constraints from an SDC file
-#read_sdc <SDC file>
-
-# Define the scan type
+# DFT configuration
 set_db dft_scan_style muxed_scan
 
-# Define the scan ports
 define_dft shift_enable -active high -create_port scan_en
-######## IMPORTANT ########
-#### THE SIGNAL NAMED "clock" MAY NEED TO BE REPLACED
-#### BY THE NAME OF THE CLOCK IN YOUR CIRCUIT
 define_dft test_clock -name scan_clk clock
 
-# Check for DFT violations
 check_dft_rules > dft_rules.report
 
-# Synthesize
+# Synthesis
 set_db syn_global_effort high
 syn_generic
 syn_map
 
-# Generate report
 report dft_registers
 
-# Create the scan chain
+# Scan chain creation
 define_dft scan_chain -name chain1 -create_ports -sdi scan_in -sdo scan_out
 connect_scan_chains -auto_create_chains -preview
 connect_scan_chains -auto_create_chains

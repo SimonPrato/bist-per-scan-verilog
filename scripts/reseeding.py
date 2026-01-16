@@ -1,10 +1,16 @@
+"""
+BIST Seed Optimization Script
+
+Automatically finds optimal LFSR seeds to maximize fault coverage.
+Iteratively tests random seeds until target coverage is achieved.
+"""
+
 import subprocess
 import re
 import random
 import os
 from datetime import datetime
 
-# Configuration constants
 TARGET_COVERAGE = 0.95
 LFSR_FILE = 'sources/lfsr.v'
 LFSR_LINE_NUM = 18
@@ -18,14 +24,7 @@ def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def replace_line_in_file(filename, line_num, new_content):
-    """
-    Replace a specific line in a file with new content.
-    
-    Args:
-        filename: Path to the file
-        line_num: Line number to replace (1-based indexing)
-        new_content: New content for the line
-    """
+    """Replace a specific line in a file with new content."""
     with open(filename, 'r') as file:
         lines = file.readlines()
     
@@ -59,41 +58,22 @@ def update_misr_signature(golden_signature):
     replace_line_in_file(MISR_FILE, MISR_LINE_NUM, line_content)
 
 def run_seed_finding():
-    """
-    Run the seed finding process and return the output.
-    
-    Returns:
-        bytes: Output from the seed finding process
-    """
+    """Run the seed finding process and return the output."""
     subprocess.check_output(['make', 'SYN_final'], stderr=subprocess.STDOUT)
     return subprocess.check_output(['make', 'FS_concurrent'], stderr=subprocess.STDOUT)
 
 def parse_fault_coverage(output):
-    """
-    Parse fault coverage statistics from the simulation output.
-
-    Args:
-        output: Bytes output from subprocess
-
-    Returns:
-        tuple: (detected_total, detected_prime, pot_detected_total,
-                pot_detected_prime, undetected_total, undetected_prime, 
-                match_object, matched_text)
-    """
-    # Decode the output
+    """Parse fault coverage statistics from the simulation output."""
     decoded_output = output.decode()
 
-    # Find the position of "Stuck-At (0/1) Fault Table" and delete everything before it
     table_marker = "Stuck-At (0/1) Fault Table"
     marker_pos = decoded_output.find(table_marker)
 
     if marker_pos == -1:
         raise ValueError("Could not find 'Stuck-At (0/1) Fault Table' in output")
 
-    # Keep only the content from the table marker onwards
     output_trimmed = decoded_output[marker_pos:]
 
-    # Pattern to match the three rows we need: Detected, Potentially_detected, Undetected
     pattern = (
         r'Detected\s+(\d+)\s+(\d+)\s*\n'
         r'\s*Potentially_detected\s+(\d+)\s+(\d+)\s*\n'
@@ -110,25 +90,13 @@ def parse_fault_coverage(output):
     pot_detected_prime = float(match.group(4))
     undetected_total = float(match.group(5))
     undetected_prime = float(match.group(6))
-    
-    # Get the matched text (the actual lines from the table)
     matched_text = match.group(0)
 
     return (detected_total, detected_prime, pot_detected_total,
             pot_detected_prime, undetected_total, undetected_prime, match, matched_text)
 
 def calculate_coverage(detected, potentially_detected, undetected):
-    """
-    Calculate the fault coverage percentage.
-    
-    Args:
-        detected: Number of detected faults
-        potentially_detected: Number of potentially detected faults
-        undetected: Number of undetected faults
-        
-    Returns:
-        float: Coverage percentage (0.0 to 1.0)
-    """
+    """Calculate the fault coverage percentage."""
     total = detected + potentially_detected + undetected
     if total == 0:
         return 0.0
@@ -137,24 +105,7 @@ def calculate_coverage(detected, potentially_detected, undetected):
 def log_iteration_data(log_file, iteration, seed, detected_total, detected_prime, 
                        pot_detected_total, pot_detected_prime, undetected_total, 
                        undetected_prime, coverage_total, coverage_prime, match_obj, matched_text):
-    """
-    Write iteration data to log file.
-    
-    Args:
-        log_file: Path to log file
-        iteration: Current iteration number
-        seed: LFSR seed value used
-        detected_total: Total detected faults
-        detected_prime: Prime detected faults
-        pot_detected_total: Total potentially detected faults
-        pot_detected_prime: Prime potentially detected faults
-        undetected_total: Total undetected faults
-        undetected_prime: Prime undetected faults
-        coverage_total: Total coverage percentage
-        coverage_prime: Prime coverage percentage
-        match_obj: The regex match object from parsing
-        matched_text: The actual text that was matched by the regex
-    """
+    """Write iteration data to log file."""
     with open(log_file, 'a') as f:
         f.write("=" * 80 + "\n")
         f.write("Iteration: {}\n".format(iteration))
@@ -193,14 +144,12 @@ def log_iteration_data(log_file, iteration, seed, detected_total, detected_prime
 
 def main():
     """Main function to find optimal BIST seed for target fault coverage."""
-    # Initialize log file with header
     with open(LOG_FILE, 'w') as f:
         f.write("BIST Seed Finding Log\n")
         f.write("Started: {}\n".format(datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
         f.write("Target Coverage: {:.2%}\n".format(TARGET_COVERAGE))
         f.write("\n")
     
-    # Initialize fault statistics
     detected_total = 0.0
     detected_prime = 0.0
     pot_detected_total = 0.0
@@ -213,7 +162,6 @@ def main():
     iteration = 0
     seed = 0
     
-    # Continue until both coverage metrics reach target
     while True:
         clear_console()
         
@@ -223,7 +171,6 @@ def main():
         print("Iteration {}: Coverage - Total: {:.2%}, Prime: {:.2%}".format(
             iteration, coverage_total, coverage_prime))
         
-        # Log the iteration data
         log_iteration_data(LOG_FILE, iteration, seed, detected_total, detected_prime,
                           pot_detected_total, pot_detected_prime, undetected_total,
                           undetected_prime, coverage_total, coverage_prime, match_obj, matched_text)
@@ -232,7 +179,6 @@ def main():
             print("\nTarget coverage achieved!")
             print("Final - Total: {:.2%}, Prime: {:.2%}".format(coverage_total, coverage_prime))
             
-            # Write final summary to log
             with open(LOG_FILE, 'a') as f:
                 f.write("=" * 80 + "\n")
                 f.write("TARGET COVERAGE ACHIEVED!\n")
@@ -244,19 +190,15 @@ def main():
                 f.write("=" * 80 + "\n")
             break
         
-        # Generate and apply new seed
         seed = generate_random_seed()
         print("Testing seed: {}".format(seed))
         update_lfsr_seed(seed)
         
-        # Run simulation
         run_simulation()
         
-        # Update MISR with golden signature
         golden_signature = read_golden_signature()
         update_misr_signature(golden_signature)
         
-        # Run seed finding and parse results
         output = run_seed_finding()
         (detected_total, detected_prime, pot_detected_total, 
          pot_detected_prime, undetected_total, undetected_prime, match_obj, matched_text) = parse_fault_coverage(output)
