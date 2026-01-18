@@ -5,8 +5,9 @@
 This project implements a comprehensive Built-In Self-Test (BIST) system using scan chain methodology for automated circuit testing. The BIST architecture enables self-testing of a predefined Circuit Under Test (CUT) without external test equipment.
 
 ### Course Information
+- **University**: Técnico Lisboa
 - **Course**: Design Test and Reliability of Electronic Systems
-- **Project**: Project #2 - BIST-per-Scan Implementation
+- **Project**: BIST-per-Scan Implementation
 
 ## System Architecture
 
